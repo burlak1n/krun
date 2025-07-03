@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Phonk Sans';
+  src: url('@/assets/fonts/PhonkSans.otf') format('opentype');
+  font-weight: normal; /* Указываем нормальное начертание */
+  font-style: normal;
+}
+
+/* Общий класс для текста с Phonk Sans */
+.phonk-text {
+  font-family: 'Phonk Sans', sans-serif; /* Добавляем запасной шрифт */
+  font-weight: 300; /* Общий вес для заголовков, найденный в компонентах */
+  /* Другие общие стили можно добавить здесь */
+} 

@@ -1,0 +1,6 @@
+/* src/assets/styles/main.css */
+/* Global styles will go here */
+body {
+  background-color: var(--background-light);
+  margin: 0px 24px;
+}
