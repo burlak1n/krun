@@ -1,8 +1,8 @@
 <template>
   <div class="registration-container">
-    <div class="background-image">
+    <!-- <div class="background-image">
       <div class="color-overlay"></div>
-    </div>
+    </div> -->
     <div class="registration-content">
       <!-- Логотип HSE Run -->
       <div class="logo">
@@ -10,9 +10,6 @@
       </div>
       
       <h1 class="registration-title">{{ $t('registration.title') }}</h1>
-      
-      <p class="registration-address">{{ $t('registration.address') }}</p>
-      
       <TelegramLogin @auth="handleAuth" botName="hse_run_bot"/>
     </div>
   </div>
@@ -59,23 +56,24 @@ export default {
   align-items: center;
   min-height: 100vh;
   overflow: hidden;
+  max-width: 100vw;
 }
 
-.background-image {
+ .background-image {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('@/assets/images/map-reg.svg');
+  background-image: url('@/assets/images/registration.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
-  opacity: 0.8;
+  opacity: 1;
   margin: 0;
   padding: 0;
-}
+} 
 
 .registration-content {
   position: relative;
@@ -85,32 +83,23 @@ export default {
   align-items: center;
   max-width: 400px;
   width: 100%;
-  border-radius: 20px;
-  padding: 20px;
-  background-color: rgba(243, 243, 243, 0.95);
+  border-radius: 12px;
+  padding: 48px;
+  background-color: var(--white);
+  gap: 48px;
 }
 
 .logo {
-  margin-bottom: 40px;
-  margin-left: 10px;
+  margin: 0;
 }
 
 .registration-title {
-  color: #333;
+  color: var(--text-color);
   font-size: 48px;
   font-weight: 300;
   text-align: center;
-  font-family: 'InvolveMedium';
-}
-
-.registration-address {
-  color: #333;
-  font-size: 24px;
-  font-weight: 300;
-  margin-bottom: 40px;
-  margin-top: 0;
-  text-align: center;
-  font-family: 'InvolveMedium';
+  font-family: 'Mont_SB';
+  margin: 0;
 }
 :root {
   margin: 0;
@@ -119,15 +108,19 @@ export default {
 }
 
 @media (max-width: 480px) {
+  .registration-content {
+    padding: 24px;
+  }
   .registration-container {
     padding: 15px;
   }
-  .logo {
+  .img-logo {
+    padding: 10px 25px;
     margin-bottom: 0;
   }
 
   .registration-title {
-    font-size: 36px;
+    font-size: 20px;
   }
   
   .registration-address {

@@ -3,6 +3,7 @@
     <LogoComponent />
     <div class="container">
       <div class="stats-bar">
+        <button @click="router.back()" class="back-btn">Назад</button>
         <div class="stats-item">Счёт: {{ teamScore }}</div>
         <div class="stats-item">Монеты: {{ teamCoins }}</div>
         <button @click="showQrCode" class="qr-btn" :disabled="isLoadingQr">
@@ -49,13 +50,23 @@ const {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 54 px;
+  width: 100%;
+  max-width: 700px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+}
 .quest-page {
-  font-family: 'Involve', Arial, sans-serif;
+  font-family: 'Mont_R';
   width: 100%;
   min-height: 100vh;
   margin: 0;
   padding: 0 0 30px 0;
-  background-image: url('@/assets/images/quest_bg.png');
+  /* background-image: url('@/assets/images/registration.svg'); */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -101,23 +112,22 @@ h3 {
 
 .container {
   position: relative;
-  padding: 0 15px;
+  padding: 0px;
   width: 100%;
   max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
+  gap: 54px;
 }
 
 .stats-bar {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-  padding: 10px 15px;
-  background-color: rgba(255, 255, 255, 0.8);
+  justify-content: center;
+  gap: 48px;
+  padding: 24px 48px;
+  background-color: var(--white);
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: auto;
@@ -125,25 +135,31 @@ h3 {
 }
 
 .stats-item {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 500;
-  color: #333;
-  padding: 5px 0;
+  color: var(--text-color);
+  padding: 0;
+  font-family: 'Mont_R';
+  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
 }
 
 .qr-btn {
-  background-color: #444;
+  background-color: var(--croc-purple);
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
+  border-radius: 12px;
+  padding: 16px 32px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 24px;
   transition: background-color 0.2s ease;
 }
 
 .qr-btn:hover {
-  background-color: #333;
+  box-shadow: 0px 0px 10px 0px #FFF;
 }
 
 .qr-btn:disabled {
@@ -200,12 +216,29 @@ h3 {
   background-color: #3367d6;
 }
 
+.back-btn {
+  background-color: var(--croc-green);
+  color: var(--text-color);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  display: block;
+}
+
+.back-btn:hover {
+  box-shadow: 0px 0px 10px 0px #FFF;
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .stats-bar {
     align-items: center;
-    gap: 10px;
-    padding: 15px;
+    gap: 8px;
+    padding: 10px;
   }
   
   .logo {
@@ -213,13 +246,35 @@ h3 {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 430px) {
+  .container {
+    gap: 20px;
+  }
+  .stats-bar {
+    padding: 10px;
+
+  }
+  .stats-item {
+    font-size: 15px;
+    max-width: 60px;
+  }
   .container {
     padding: 0 10px;
+    gap: 36px;
   }
-  
+  .back-btn {
+    font-size: 15px;
+    padding: 10px 15px;
+  }
+  .qr-btn {
+    font-size: 15px;
+    padding: 10px 15px;
+  }
   .logo {
     font-size: 28px;
+  }
+  .quest-page h2 {
+    font-size: 20px;
   }
 }
 

@@ -32,11 +32,8 @@
                 class="progress-bar blue" 
                 :style="`width: ${block.progress || 0}%`"
               >
-                <span class="progress-label" v-if="block.progress > 20">
-                  {{ block.progress || 0 }}% ({{ block.solved_count || 0 }}/{{ block.total_count || 0 }})
-                </span>
               </div>
-              <span class="progress-label outside" v-if="block.progress <= 20">
+              <span class="progress-label outside">
                 {{ block.progress || 0 }}% ({{ block.solved_count || 0 }}/{{ block.total_count || 0 }})
               </span>
             </div>
@@ -48,11 +45,8 @@
                 class="progress-bar red" 
                 :style="`width: ${(block.insider_count / block.total_count) * 100 || 0}%`"
               >
-                <span class="progress-label" v-if="(block.insider_count / block.total_count) * 100 > 20">
-                  Посещено: {{ block.insider_count || 0 }}/{{ block.total_count || 0 }}
-                </span>
               </div>
-              <span class="progress-label outside red-text" v-if="(block.insider_count / block.total_count) * 100 <= 20">
+              <span class="progress-label outside red-text">
                 Посещено: {{ block.insider_count || 0 }}/{{ block.total_count || 0 }}
               </span>
             </div>
@@ -87,36 +81,65 @@ onActivated(() => {
   questStore.fetchQuestData(); // Повторно загружаем для актуальности
 });
 
-// Опционально: можно добавить watcher для visibilitychange, если KeepAlive не используется
-// import { useEventListener } from '@vueuse/core'; // Потребует установки @vueuse/core
-// useEventListener(document, 'visibilitychange', () => {
-//   if (document.visibilityState === 'visible') {
-//     questStore.fetchQuestData();
-//   }
-// });
-
 </script>
 
 <style scoped>
+
 .quest-blocks {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 54px;
   margin: 0 auto;
   max-width: 700px;
   overflow: visible;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
 }
 
 .quest-block {
-  border: 2px solid #ff5252;
   border-radius: 15px;
-  max-width: 700px;
+  width: 100%; /* Занимает всю доступную ширину */
+  max-width: calc(100vw - 40px); /* Отступы по 20px с каждой стороны */
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--white);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 30px;
+  box-sizing: border-box; /* Включает padding в общую ширину */
+}
+
+/* Адаптивность для больших экранов */
+@media (min-width: 1200px) {
+  .quest-block {
+    max-width: 1160px; /* Максимальная ширина для больших экранов */
+    margin: 0 auto; /* Центрирование */
+  }
+}
+
+/* Адаптивность для средних экранов */
+@media (max-width: 768px) {
+  .quest-block {
+    max-width: calc(100vw - 20px); /* Меньшие отступы */
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+/* Адаптивность для маленьких экранов */
+@media (max-width: 480px) {
+  .quest-block {
+    max-width: calc(100vw - 10px); /* Минимальные отступы */
+    padding: 15px;
+    gap: 15px;
+    border-radius: 10px;
+  }
 }
 
 /* Применяем hover-эффект только для устройств с мышью/указателем */
@@ -128,12 +151,13 @@ onActivated(() => {
 }
 
 .block-title {
-  padding: 15px 10px;
   text-align: center;
-  font-size: 18px;
+  font-size: 36px;
   font-weight: 500;
-  color: #333;
+  color: var(--text-color);
   background: none;
+  font-family: 'Mont_SB';
+  white-space: pre-line;
 }
 
 .progress-area {
@@ -146,8 +170,8 @@ onActivated(() => {
 
 .progress-container {
   width: 100%;
-  height: 25px;
-  background-color: #e0e0e0;
+  height: 33px;
+  background-color: rgba(217, 217, 217, 1);
   border-radius: 15px;
   overflow: hidden;
   position: relative;
@@ -158,33 +182,38 @@ onActivated(() => {
   border-radius: 15px;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: right;
   transition: width 0.3s ease;
 }
 
 .blue {
-  background-color: #4285f4;
+  background-color: var(--croc-green);
 }
 
 .red {
-  background-color: #ff5252;
+  background-color: var(--croc-purple);
 }
 
 .progress-label {
-  color: white;
-  font-size: 12px;
+  color: var(--text-color);
+  font-size: 20px;
   white-space: nowrap;
-  padding: 0 10px;
+  padding: 0 20px;
   z-index: 1;
 }
 
 .progress-label.outside {
   position: absolute;
-  right: 10px;
-  color: #666;
-  font-size: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  color: var(--text-color);
+  font-size: 20px;
+  margin: 0;
   top: 50%;
-  transform: translateY(-50%);
+  text-align: center;
+  width: 100%;
+  font-family: 'Mont_R';
+  font-weight: 500;
 }
 
 .red-text {
@@ -242,5 +271,33 @@ onActivated(() => {
 /* PrimeVue Skeleton по умолчанию может не иметь margin, добавляем утилиты */
 .mb-2 { margin-bottom: 0.5rem; }
 .mb-3 { margin-bottom: 1rem; }
+
+@media (max-width: 430px) {
+  .progress-container {
+    height: 28px;
+  }
+  .quest-blocks {
+    gap: 16px;
+  }
+  .quest-block {
+    padding: 10px 20px;
+    gap: 10px;
+  }
+  .block-title {
+    font-size: 16px;
+  }
+  
+  .progress-label.outside {
+    font-size: 14px;
+    align-items: center;
+    
+  }
+  .progress-area {
+    padding: 0px;
+    max-width: 342px;
+    align-items: center;
+
+  }
+}
 
 </style>

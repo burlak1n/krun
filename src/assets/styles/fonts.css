@@ -31,4 +31,22 @@
     font-display: swap;
   }
 
+  @font-face {
+    font-family: 'Weather';
+    src: url('@/assets/fonts/CoFoWeather20240219 2/WOFF2/CoFoWeather20240219-ExtendedMedium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Mont_SB';
+    src: url('@/assets/fonts/MontSemiBold.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Mont_R';
+    src: url('@/assets/fonts/MontRegular.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+  }
   /* Добавьте здесь другие шрифты по аналогии */ 

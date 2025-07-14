@@ -9,8 +9,7 @@ export default {
   start: {
     tagline: 'solve every riddle',
     maintitle: 'MOSCOW CULTURAL HISTORICAL QUEST',
-    subtitle1: "You don't have to run at all! ",
-    subtitle2: 'The main thing is to solve as many riddles as\u00A0possible during the quest.',
+    subtitle: 'The main thing is to solve as many riddles as\u00A0possible during the quest.',
     registration: 'REGISTRATION',
     startquest: 'START QUEST',
     eventdate: 'April 27, 10:30',
@@ -24,28 +23,16 @@ export default {
 
   participation: {
     titlemain: "How to Participate",
-    steps: [
-      {
-        point: "Create a Team",
-        description: "HSE RUN is designed for teams of\u00A02\u00A0to\u00A06\u00A0people, so hurry up and\u00A0invite your\u00A0friends!"
-      },
-      {
-        point: "Choose Quest Language",
-        description: "We've prepared two versions of\u00A0the\u00A0quest — in\u00A0Russian and\u00A0English."
-      },
-      {
-        point: "Dress Comfortably",
-        description: "Check the weather and get out exploring the streets! We advise you to wear comfortable shoes"
-      },
-      {
-        point: "Come to the Opening and Get Energized for\u00A0the Entire Quest",
-        description: "Subscribe to our Telegram channel so you don't miss the\u00A0beginning of\u00A0the\u00A0quest."
-      },
-      {
-            point: "Solve the Riddles, you have 4\u00A0hours",
-        description: "Solve the riddles, come to these places in\u00A0Moscow and\u00A0get extra points."
-      }
-    ]
+    point1: "Create a Team",
+    description1: "HSE RUN is designed for teams of\u00A02\u00A0to\u00A06\u00A0people, so hurry up and\u00A0invite your\u00A0friends!",
+    point2: "Choose Quest Language",
+    description2: "We've prepared two versions of\u00A0the\u00A0quest — in\u00A0Russian and\u00A0English.",
+    point3: "Dress Comfortably",
+    description3: "Check the weather and get out exploring the streets! We advise you to wear comfortable shoes",
+    point4: "Come to the Opening and Get Energized for\u00A0the Entire Quest",
+    description4: "Subscribe to our Telegram channel so you don't miss the\u00A0beginning of\u00A0the\u00A0quest.",
+    point5: "Solve the Riddles, you have 4\u00A0hours",
+    description5: "Solve the riddles, come to these places in\u00A0Moscow and\u00A0get extra points."
   },
     
   profile: {

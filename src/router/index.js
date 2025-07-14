@@ -21,13 +21,13 @@ const routes = [
      path: "/quest",
      name: "quest",
      component: QuestView,
-     meta: { title: "Прохождение квеста", requiresActiveEvent: true }
+     meta: { title: "Прохождение квеста" /*, requiresActiveEvent: true*/ }
    },
   {
     path: "/quest/:id",
     name: "questBlock",
     component: BlocksView,
-    meta: { title: "Блок квеста", requiresActiveEvent: true }
+    meta: { title: "Блок квеста" /*, requiresActiveEvent: true*/ }
   },
    {
      path: "/profile",
@@ -115,7 +115,8 @@ router.beforeEach(async (to, from, next) => {
     return next();
   }
   
-  // Проверяем, требуется ли активный квест для маршрута
+  // ЗАКОММЕНТИРОВАНО ДЛЯ РАЗРАБОТКИ: Проверяем, требуется ли активный квест для маршрута
+  /*
   if (to.meta.requiresActiveEvent) {
     try {
       const response = await fetch('/api/auth/event/status');
@@ -132,6 +133,7 @@ router.beforeEach(async (to, from, next) => {
       return next('/');
     }
   }
+  */
   
   // Проверка прав организатора теперь выполняется в beforeEnter для /admin/stats
   next();

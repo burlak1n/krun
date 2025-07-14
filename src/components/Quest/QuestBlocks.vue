@@ -1,6 +1,5 @@
 <template>
   <QuestShell :teamScore="questStore.teamScore" :teamCoins="questStore.teamCoins">
-    <button @click="router.back()" class="back-btn">Назад</button>
     <h2 v-if="questStore.loading && !questStore.currentBlockTitle">
         <Skeleton width="40%" height="2rem" style="margin: 0 auto;"></Skeleton>
     </h2>
@@ -115,11 +114,11 @@ onUnmounted(() => {
 }
 
 .back-btn {
-  background-color: #4285f4;
-  color: white;
+  background-color: var(--croc-green);
+  color: var(--text-color);
   border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  border-radius: 12px;
+  padding: 16px 32px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.2s ease;
@@ -128,6 +127,6 @@ onUnmounted(() => {
 }
 
 .back-btn:hover {
-  background-color: #3367d6;
+  box-shadow: 0px 0px 10px 0px #FFF;
 }
 </style>

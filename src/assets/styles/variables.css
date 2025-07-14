@@ -1,10 +1,10 @@
 /* src/assets/styles/variables.css */
 :root {
-    --primary-color: #ff0000;
-    --secondary-color: #4169e1;
-    --text-color: #333333;
-    --background-light: #f3f3f3;
-    --background-dark: #333333;
+    --croc-green: #BFE154;
+    --croc-purple: #A09EFA;
+    --white: #FFFFFF;
+    --text-color: #122937;
+    --croc-deep-purple: #4C55B0;
     --spacing-xs: 5px;
     --spacing-sm: 10px;
     --spacing-md: 15px;
@@ -13,8 +13,4 @@
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
-    
-    /* Добавленные цвета для HSE RUN */
-    --hse-blue: #4369AC;
-    --hse-red: #C80002;
   }

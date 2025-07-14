@@ -28,17 +28,19 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #122937;
 }
 
 #app {
-  
-  background-image: url('@/assets/images/quest_bg.png');
+  padding: 0;
+  margin: 0;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Минимальная высота на весь экран */
+  max-width: 100vw; 
 }
 
 #app.home-route {
@@ -51,7 +53,7 @@ html, body {
 .registration-route #app,
 .previous-route #app,
 .qrVerify-route #app {
-  background-image: url('@/assets/images/quest_bg.png') !important;
+  background-image: url('@/assets/images/registration.svg') !important;
 }
 
 /* ... остальные стили ... */
@@ -67,7 +69,7 @@ html, body {
 .p-toast .p-toast-message {
   border-radius: 8px; 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.98); /* Добавляем фон (почти белый) */
+  background: #122937; /* Добавляем фон (почти белый) */
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 

@@ -57,4 +57,17 @@ export default {
   border-radius: 4px;
   transition: width 0.3s ease;
 }
+
+@media (max-width: 430px) {
+  .quest-title {
+    font-size: 18px;
+  }
+  .quest-block {
+    padding: 10px;
+    gap: 10px;
+  }
+  .progress-bar {
+    height: 28px;
+  }
+}
 </style> 

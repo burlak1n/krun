@@ -30,9 +30,9 @@
           </div>
         </div>
         
-        <div class="button-container">
+         <div class="button-container">
           <button type="submit" class="register-button">{{ $t('telegramLogin.register') }}</button>
-        </div>
+        </div> 
       </form>
     </div>
   </div>
@@ -260,11 +260,11 @@ export default {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  padding: 0 10px;
+  padding: 0;
 }
 
 .telegram-login-container {
-  margin: 20px 0;
+  margin:0;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -274,23 +274,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background-color: #389ce9; /* Цвет Telegram */
+  background-color: var(--croc-purple); /* Цвет Telegram */
   color: white;
   border: none;
-  border-radius: 50px;
-  padding: 12px 25px;
-  font-size: 18px;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 30px;
   cursor: pointer;
   transition: background-color 0.3s;
   width: 100%;
-  max-width: 300px;
   box-sizing: border-box;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .register-button:hover {
-  background-color: #2d8ad9;
+  background-color: var(--croc-deep-purple);
 }
 
 .button-container {
@@ -360,6 +358,10 @@ h2 {
   
   .form-group input {
     font-size: 14px;
+  }
+  .register-button {
+    padding: 10px 15px;
+    font-size: 18px;
   }
 }
 </style>

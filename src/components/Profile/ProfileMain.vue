@@ -130,13 +130,15 @@ export default {
 
 /* Специфичные стили только для этого компонента */
 .profile-main {
-  margin-bottom: 30px;
+  margin: 0;
+  display: inline;
 }
 
 .profile-card {
   display: flex;
   align-items: center;
   gap: 25px;
+  margin: 0;
 }
 
 .profile-avatar {
@@ -175,13 +177,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 22px;
 }
 
 .profile-name {
   font-size: 22px;
   font-weight: 500;
   color: #333;
-  margin: 0 0 5px 0;
+  margin: 0;
   white-space: normal;
   word-wrap: break-word;
   max-width: 350px;
@@ -190,7 +193,7 @@ export default {
 .profile-username {
   font-size: 16px;
   color: var(--hse-blue);
-  margin: 0 0 10px 0;
+  margin: 0;
 }
 
 .profile-team {

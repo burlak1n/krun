@@ -3,7 +3,6 @@
     class="riddle-block"
     :class="{'insider-visited': riddle.has_insider_attempt}"
   >
-    <h3 class="riddle-title" v-html="riddle.title || ''"></h3>
     
     <!-- Если загадка уже отвечена -->
     <template v-if="isAnswered(riddle)">
@@ -253,28 +252,27 @@ const getFileType = (filePath) => {
 
 /* Стили скопированы из QuestBlocks.vue, относящиеся к .riddle-block и его содержимому */
 .riddle-block {
-  border: 2px solid #ff5252;
   border-radius: 15px;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--white);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
   transition: transform 0.2s ease;
-  padding: 15px;
+  padding: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 16px;
 }
 
 .insider-visited {
-  border-color: #4caf50;
+  border-color: var (--croc-green);
 }
 
 .riddle-title {
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: var (--croc-purple);
   margin-top: 0;
   margin-bottom: 3px;
   text-align: center;
@@ -438,4 +436,11 @@ const getFileType = (filePath) => {
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+@media (max-width: 430px) {
+  .riddle-block{
+    padding: 10px 20px;
+  }
+}
+
 </style> 

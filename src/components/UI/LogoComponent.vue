@@ -1,9 +1,9 @@
 <template>
   <a v-if="externalLink" :href="externalLink" rel="noopener noreferrer" class="logo-link">
-    <img src="@/assets/images/hserun_logo.svg" class="logo">
+    <img src="@/assets/images/logoTQC.svg" class="logo">
   </a>
   <router-link v-else :to="defaultLink" class="logo-link">
-    <img src="@/assets/images/hserun_logo.svg" class="logo">
+    <img src="@/assets/images/logoTQC.svg" class="logo">
   </router-link>
 </template>
 
@@ -30,7 +30,7 @@ export default {
 <style scoped>
 .logo-link {
   text-decoration: none;
-  margin: 20px 0 5px;
+  margin: 0px 0 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,8 +60,9 @@ export default {
 
 @media (max-width: 480px) {
   .logo {
-    font-size: 28px;
-    max-height: 40px;
+    height: 16px;
+    margin: 0;
+    padding: 10px 20px;
   }
 }
 </style> 

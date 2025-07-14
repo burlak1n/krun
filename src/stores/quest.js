@@ -42,6 +42,9 @@ export const useQuestStore = defineStore('quest', () => {
   async function fetchQuestData() {
     loading.value = true;
     error.value = null;
+    
+    // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ
+    /*
     try {
       const response = await questAPI.getAllBlocks(); // Используем questAPI
       const data = response.data; // axios помещает ответ в data
@@ -61,6 +64,62 @@ export const useQuestStore = defineStore('quest', () => {
     } finally {
       loading.value = false;
     }
+    */
+    
+    // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ
+    try {
+      // Симулируем задержку API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      blocks.value = [
+        {
+          id: 1,
+          title: "Москва\nПобедная",
+          progress: 25,
+          solved_count: 2,
+          total_count: 8,
+          insider_count: 3
+        },
+        {
+          id: 2,
+          title: "Москва\nс мезонином",
+          progress: 50,
+          solved_count: 4,
+          total_count: 8,
+          insider_count: 5
+        },
+        {
+          id: 3,
+          title: "Москва\nНаучная",
+          progress: 0,
+          solved_count: 0,
+          total_count: 8,
+          insider_count: 0
+        },
+        {
+          id: 4,
+          title: "Москва Словами\nПоэта",
+          progress: 75,
+          solved_count: 6,
+          total_count: 8,
+          insider_count: 7
+        },
+        {
+          id: 5,
+          title: "Москва Современного\nИскусства",
+          progress: 12,
+          solved_count: 1,
+          total_count: 8,
+          insider_count: 2
+        }
+      ];
+      teamScore.value = 156;
+      teamCoins.value = 24;
+    } catch (err) {
+      error.value = 'Ошибка загрузки данных (MOCK)';
+    } finally {
+      loading.value = false;
+    }
   }
 
   async function fetchBlockData(blockId) {
@@ -70,6 +129,9 @@ export const useQuestStore = defineStore('quest', () => {
     }
     loading.value = true;
     error.value = null;
+    
+    // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ  
+    /*
     // Не сбрасываем currentBlock здесь, чтобы избежать мерцания
     try {
       const response = await questAPI.getBlock(blockId); // Используем questAPI
@@ -91,6 +153,49 @@ export const useQuestStore = defineStore('quest', () => {
     } finally {
       loading.value = false;
     }
+    */
+    
+    // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ
+    try {
+      // Симулируем задержку API
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      currentBlock.value = {
+        id: blockId,
+        title: `Блок квеста #${blockId}`,
+        riddles: [
+          {
+            id: 1,
+            title: "Загадка 1",
+            content: "Текст первой загадки...",
+            solved: false,
+            has_hint: false,
+            hint: null
+          },
+          {
+            id: 2,
+            title: "Загадка 2", 
+            content: "Текст второй загадки...",
+            solved: true,
+            has_hint: true,
+            hint: "Подсказка к загадке 2"
+          },
+          {
+            id: 3,
+            title: "Загадка 3",
+            content: "Текст третьей загадки...",
+            solved: false,
+            has_hint: false,
+            hint: null
+          }
+        ]
+      };
+    } catch (err) {
+      error.value = `Ошибка загрузки блока ${blockId} (MOCK)`;
+      currentBlock.value = null;
+    } finally {
+      loading.value = false;
+    }
   }
   
   // Действие для проверки ответа
@@ -98,6 +203,9 @@ export const useQuestStore = defineStore('quest', () => {
     checkingAnswer.value = true;
     error.value = null; // Сбрасываем предыдущие ошибки
     let result = { ok: false, isCorrect: false, message: '' };
+    
+    // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ
+    /*
     try {
       const response = await questAPI.checkAnswer(riddleId, answer);
       result = response.data;
@@ -130,6 +238,42 @@ export const useQuestStore = defineStore('quest', () => {
     } finally {
       checkingAnswer.value = false;
     }
+    */
+    
+    // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ
+    try {
+      // Симулируем задержку API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Простая логика: если ответ содержит "правильный" - считаем верным
+      const isCorrect = answer.toLowerCase().includes('правильный') || answer.toLowerCase().includes('москва');
+      
+      result = {
+        ok: true,
+        isCorrect: isCorrect,
+        message: isCorrect ? 'Правильный ответ!' : 'Неверный ответ, попробуйте еще раз',
+        team_score: isCorrect ? teamScore.value + 10 : teamScore.value,
+        team_coins: isCorrect ? teamCoins.value + 2 : teamCoins.value
+      };
+      
+      if (isCorrect) {
+        teamScore.value = result.team_score;
+        teamCoins.value = result.team_coins;
+        
+        // Обновляем загадку как решенную
+        if (currentBlock.value && currentBlock.value.riddles) {
+          const riddleIndex = currentBlock.value.riddles.findIndex(r => r.id === riddleId);
+          if (riddleIndex !== -1) {
+            currentBlock.value.riddles[riddleIndex].solved = true;
+          }
+        }
+      }
+    } catch (err) {
+      result.message = 'Ошибка проверки ответа (MOCK)';
+    } finally {
+      checkingAnswer.value = false;
+    }
+    
     return result; // Возвращаем результат для обработки в компоненте (например, показать alert)
   }
   
@@ -138,6 +282,9 @@ export const useQuestStore = defineStore('quest', () => {
      requestingHint.value = true;
      error.value = null;
      let result = { ok: false, hint: null, message: '' };
+    
+    // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ
+    /*
     try {
       const response = await questAPI.getHint(riddleId);
       result = response.data;
@@ -169,6 +316,45 @@ export const useQuestStore = defineStore('quest', () => {
     } finally {
        requestingHint.value = false;
     }
+    */
+    
+    // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ
+    try {
+      // Симулируем задержку API
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      if (teamCoins.value >= 5) {
+        result = {
+          ok: true,
+          hint: `Подсказка для загадки ${riddleId}: Обратите внимание на исторические факты...`,
+          message: 'Подсказка получена!',
+          team_score: teamScore.value,
+          team_coins: teamCoins.value - 5
+        };
+        
+        teamCoins.value = result.team_coins;
+        
+        // Обновляем загадку с подсказкой
+        if (currentBlock.value && currentBlock.value.riddles) {
+          const riddleIndex = currentBlock.value.riddles.findIndex(r => r.id === riddleId);
+          if (riddleIndex !== -1) {
+            currentBlock.value.riddles[riddleIndex].has_hint = true;
+            currentBlock.value.riddles[riddleIndex].hint = result.hint;
+          }
+        }
+      } else {
+        result = {
+          ok: false,
+          hint: null,
+          message: 'Недостаточно монет для получения подсказки'
+        };
+      }
+    } catch (err) {
+      result.message = 'Ошибка запроса подсказки (MOCK)';
+    } finally {
+       requestingHint.value = false;
+    }
+    
     return result; // Возвращаем результат для обработки в компоненте
   }
   

@@ -3,54 +3,52 @@
     <div class="homefaq-wrapper">
       <h2>{{ $t('faq.title') }}</h2>
 
-      <div class="questions-wrapper">
-        <div class="questions">
-          <div 
-            v-for="index in 6" 
-            :key="index" 
-            class="question-container"
-            @click="toggleFlip(index)"
+      <div class="faq-container">
+        <div 
+          v-for="index in 4" 
+          :key="index" 
+          class="faq-item"
+        >
+          <button
+            class="faq-button"
+            @click="toggleItem(index)"
           >
-            <div class="question-card" :class="{ 'is-flipped': flippedCards[index] }">
-              <!-- Передняя сторона карточки с вопросом -->
-              <div class="question-card__front">
-                <div class="question__content">
-                  <h3>{{ $t(`faq.question${index}`) }}</h3>
-                </div>
-              </div>
-              
-              <!-- Обратная сторона карточки с ответом -->
-              <div class="question-card__back">
-                <div class="question__content">
-                  <p>{{ $t(`faq.answer${index}`) }}</p>
-                </div>
-              </div>
+            <span class="faq-question-text">
+              {{ $t(`faq.question${index}`) }}
+            </span>
+            <img 
+              src="@/assets/images/arrowbutton-not-active.svg" 
+              alt="Arrow" 
+              class="faq-icon-arrow"
+              :class="{ 'rotated': openItems[index] }"
+            />
+          </button>
+          <div 
+            class="faq-content"
+            :class="{ 'expanded': openItems[index] }"
+          >
+            <div class="faq-content-inner">
+              <p>{{ $t(`faq.answer${index}`) }}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  
-
   </section>
 </template>
 
 <script>
-import LanguageSwitcher from '../UI/LanguageSwitcher.vue';
 export default {
   name: "HomeFAQ",
-  components: {
-    LanguageSwitcher
-  },
   data() {
     return {
-      flippedCards: {}
+      openItems: {}
     }
   },
   methods: {
-    toggleFlip(index) {
-  this.flippedCards[index] = !this.flippedCards[index];
-}
+    toggleItem(index) {
+      this.openItems[index] = !this.openItems[index];
+    }
   }
 };
 </script>
@@ -66,151 +64,220 @@ export default {
   border-radius: 80px;
   margin-top: 73px;
   margin-bottom: 73px;
-  max-width: 1360px;
+  max-width: 1450px;
 }
+
 .homefaq-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 54px;
+  width: 100%;
 }
 
 .homefaq-wrapper h2 {
   margin: 0;
-  font-size: 55px;
-  text-align: center;
-  font-family: 'PhonkSans';
-  color: var(--hse-red);
-  -webkit-text-stroke: 3px var(--hse-red);
+  font-size: 84px;
+  text-align: left;
+  font-family: 'Weather';
+  color: var(--white);
 }
-.questions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  row-gap: 29px;
-  column-gap: 70px;
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
 }
-.question-container {
-  min-height: 200px;
-  padding: 10px 20px;
-  cursor: pointer;
-  position: relative;
+
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  transition: all 0.3s ease;
 }
-.question-card {
-  perspective: 1000px;
-  border-radius: 40px;
+
+
+.faq-button {
   display: flex;
-  border: solid 2px var(--hse-red);
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  position: relative;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  min-height: 200px;
-  display: flex;
-  max-width: 575px;
+  padding: 51px 57px;
+  border: none;
+  background: var(--white);
+  cursor: pointer;
 }
-.question-card__front h3 {
-  font-size: 33px;
+
+
+.faq-question-text {
+  font-size: 48px;
+  font-family: 'Mont_R';
+  color: var(--text-color);
+  font-weight: 400;
+  text-align: left;
+}
+
+.faq-icon-arrow {
+  width: 100px;
+  height: 100px;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-icon-arrow.rotated {
+  color: var(--croc-deep-purple);
+  transform: rotate(180deg);
+}
+
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  background-color: var(--white);
+  transition: max-height 0s ease, padding 0.4s ease;
+  padding: 0 57px;
+}
+
+.faq-content.expanded {
+  max-height: 500px;
+  padding: 0 57px 57px 57px;
+}
+
+.faq-content-inner {
+  padding-top: 0;
+  transition: opacity 0.1s ease 0.1s;
+  opacity: 0;
+}
+
+.faq-content.expanded .faq-content-inner {
+  opacity: 1;
+}
+
+.faq-content p {
   margin: 0;
-  font-family: 'InvolveMedium';
-  color: var(--hse-red);
-  text-align: center;
-  padding: 10px 20px;
-}
-.question-card.is-flipped {
-  transform: rotateY(180deg);
-}
-.question-card__back {
-  font-size: 33px;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  left: 0;
-  top: 0;
-  transform: rotateY(180deg);
-  background-color: var(--hse-red);
-  border-radius: 38px;
-  
-}
-.question-card__back p {
-  font-size: 33px;
-  margin: 0;
-  font-family: 'InvolveMedium';
-  font-size: 24px;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
+  font-size: 30px;
+  line-height: 1.6;
+  color: var(--text-color);
+  font-family: 'Mont_R';
 }
 
 @media (max-width: 1360px) {
   .homefaq-wrapper h2 {
+    font-size: 84px;
+  }
+  
+  .faq-question-text {
     font-size: 40px;
   }
-  .question-card__front h3 {
-    font-size: 24px;
+  
+  .faq-content p {
+    font-size: 36px;
   }
 }
+
 @media (max-width: 768px) {
   .HomeFAQ {
     padding: 10px;
-    gap: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  .HomeFAQ h2 {
+    font-size: 60px;
   }
 
-  .questions {
-    grid-template-columns: 1fr;
-    row-gap: 10px;
-    width: 100%;
-  }
-
-  .question-container {
-    max-width: 100%;
-    min-height: 90px;
-    padding: 5px;
+  .homefaq-wrapper {
+    gap: 30px;
   }
 
   .homefaq-wrapper h2 {
-    font-size: 22px;
-    -webkit-text-stroke: 1px var(--hse-red);
+    font-size: 60px;
   }
 
-  .question-card__front h3,
-  .question-card__back p {
-    font-size: 15px;
+  .faq-container {
+    gap: 16px;
   }
-  .question-card {
-    max-width: 90%;
-    min-height: 120px;
-    margin: 0 auto;
-    border-radius: 16px;
-    border: solid 1px var(--hse-red);
+
+  .faq-item {
+    border-radius: 12px;
   }
-  .question-card__back {
-    border-radius: 16px;
-    border: solid 1px var(--hse-red);
+  
+  .faq-button {
+    padding: 30px 40px;
+  }
+  
+  .faq-question-text {
+    font-size: 32px;
+  }
+
+  .faq-content {
+    padding: 0 40px;
+  }
+
+  .faq-content.expanded {
+    padding: 0 40px 40px 40px;
+  }
+
+  .faq-content p {
+    font-size: 24px;
+  }
+  
+  .faq-icon-arrow {
+    width: 70px;
+    height: 70px;
   }
 }
+
 @media (max-width: 480px) {
   .HomeFAQ {
-    margin-top: 20px;
+    margin: 0;
   }
-  .homefaq-wrapper {
-    gap: 20px;
-    margin-top: 20px;
+  .HomeFAQ h2 {
+    font-size: 28px;
   }
-  .homefaq-wrapper h2 {
+  .HomeFAQ p {
+    font-size: 28px;
+  }
+  .faq-item {
+    border-radius: 8px;
+  }
+  
+  .faq-button {
+    padding: 16px 10px;
+  }
+  
+  .faq-question-text {
+    font-size: 24px;
+  }
+
+  .faq-content {
+    padding: 0 30px;
+  }
+
+  .faq-content.expanded {
+    padding: 0 10px 10px 10px;
+  }
+
+  .faq-content p {
     font-size: 16px;
   }
-  .question-card__front h3,
-  .question-card__back p {
-    font-size: 15px;
+  
+  .faq-icon-arrow {
+    width: 40px;
+    height: 40px;
+  }
+  .faq-question-text {
+    font-size: 18px;
   }
 }
 </style>

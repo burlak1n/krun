@@ -2,13 +2,9 @@
 <template>
   <div class="home">
     <HomeHeader />
-    <main>
+    <main class="main-content">
       <HomeStart/>
       <HomeParticipation />
-      <div class="runrun-section">
-        <img class='runrun-img' :src="require('@/assets/images/runrun.svg')" alt="описание">
-      </div>
-      <HomePartners/>
       <HomeFAQ/>
     </main>
     <HomeFooter />
@@ -58,6 +54,11 @@ body.home-page #app {
 .home {
   overflow: hidden;
 }
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
 .runrun-section{
   margin-top: 80px;
   max-width: 1360px;
@@ -67,5 +68,17 @@ body.home-page #app {
 .runrun-img {
 width: 100%;
 z-index: 1000;
+}
+
+@media (max-width: 760px) {
+  .main-content {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 430px) {
+  .main-content {
+    gap: 60px;
+  }
 }
 </style>

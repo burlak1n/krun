@@ -14,12 +14,6 @@
         :qrLink="canViewTeamAndQr ? qrLink : null"
         @copy-qr-link="copyQrLink"
       />
-      
-      <!-- Отображаем компонент с баллами -->
-      <ProfileScore 
-        v-if="userScore !== null" 
-        :score="userScore"
-      />
 
       <!-- Личная информация и QR-код -->
       <ProfileInfo 
@@ -98,6 +92,9 @@ export default {
     // Запрос данных
     async fetchUserData() {
       console.log('Вызов fetchUserData - загрузка данных с сервера');
+      
+      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      /*
       try {
         // Загружаем данные пользователя и QR код параллельно
         const [userRes, qrRes] = await Promise.all([
@@ -127,15 +124,80 @@ export default {
         console.error(this.$t('profile.error') + ':', error);
         this.$router.push('/registration');
       }
+      */
+      
+      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      try {
+        // Симулируем задержку API
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        this.userData = {
+          id: 1,
+          full_name: "Иван Петров",
+          email: "ivan.petrov@example.com",
+          telegram_username: "@ivan_petrov",
+          score: 150,
+          is_looking_for_friends: true,
+          role: {
+            name: "participant"
+          },
+          commands: [
+            {
+              id: 1,
+              name: "Команда Победителей",
+              members: [
+                { full_name: "Иван Петров", telegram_username: "@ivan_petrov" },
+                { full_name: "Мария Иванова", telegram_username: "@maria_ivan" },
+                { full_name: "Петр Сидоров", telegram_username: "@petr_sid" }
+              ]
+            }
+          ],
+          insider_info: null
+        };
+        
+        this.qrCodeData = {
+          qr_link: "https://example.com/qr/user123",
+          qr_code_base64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+        };
+        
+        this.qrLink = this.qrCodeData.qr_link;
+        this.isLookingForTeam = !!this.userData.is_looking_for_friends;
+        this.userScore = this.userData.score;
+        
+        // Обрабатываем данные о команде
+        if (this.userData.commands && this.userData.commands.length > 0) {
+          console.log('Обновление userTeam из fetchUserData');
+          this.userTeam = this.userData.commands[0];
+        } else {
+          this.userTeam = null;
+        }
+        
+        console.log('Данные загружены (MOCK)');
+      } catch (error) {
+        console.error('Ошибка при загрузке mock данных:', error);
+      }
     },
     
     // Обработчики действий пользователя
     async logout() {
+      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      /*
       try {
         await this.makeRequest('/api/auth/logout', 'POST');
         this.$router.push('/');
       } catch (error) {
         console.error(this.$t('profile.logoutError') + ':', error);
+      }
+      */
+      
+      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      try {
+        console.log('Выход из системы (MOCK)');
+        // Симулируем задержку
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.$router.push('/');
+      } catch (error) {
+        console.error('Ошибка при выходе (MOCK):', error);
       }
     },
     
@@ -212,12 +274,26 @@ export default {
     
     // Метод переключения статуса поиска команды
     async toggleLookingStatus() {
+      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      /*
       try {
         const response = await this.makeRequest('/api/auth/toggle_looking_for_team', 'POST');
         this.isLookingForTeam = response.is_looking_for_friends;
         this.userData = { ...this.userData, is_looking_for_friends: this.isLookingForTeam };
       } catch (error) {
         console.error('Ошибка при изменении статуса поиска:', error);
+      }
+      */
+      
+      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
+      try {
+        console.log('Переключение статуса поиска команды (MOCK)');
+        // Симулируем задержку
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.isLookingForTeam = !this.isLookingForTeam;
+        this.userData = { ...this.userData, is_looking_for_friends: this.isLookingForTeam };
+      } catch (error) {
+        console.error('Ошибка при переключении статуса поиска (MOCK):', error);
       }
     }
   }
@@ -228,13 +304,23 @@ export default {
 @import './ProfileStyles.css';
 h2 {
   text-align: center;
+  font-family: 'Weather';
+  font-size: 30px;
+  color: var(--white);
+  margin: 0;
 }
-
 /* Специфичные стили только для этого компонента */
 .admin-panel-container {
   width: 100%;
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
+}
+@media (max-width: 430px) {
+  
+  h2 {
+    font-size: 30px;
+  }
+  
 }
 </style>

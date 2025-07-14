@@ -17,10 +17,13 @@ export default {
 
 <style scoped>
 .profile-view {
+  margin: 0;
   max-width: 100%;
-  margin: 0 auto;
 }
-.logo {
-  padding-left: 12px;
+@media (max-width: 430px) {
+  .profile-view {
+    gap: 36px;
+  }
+  
 }
 </style>

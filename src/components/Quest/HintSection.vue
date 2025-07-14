@@ -152,20 +152,20 @@ watch(() => props.riddle.has_hint, (newValue) => {
 }
 
 .hint-section {
-  margin: 5px 0;
+  margin:0;
   text-align: center;
   width: 100%;
 }
 
 .hint-button {
-  font-family: 'Involve', Arial, sans-serif;
-  background-color: #f0f0f0;
-  color: #555;
+  font-family: 'Mont_SB';
+  background-color: var(--croc-purple);
+  color: var(--white);
   border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
+  border-radius: 100px;
+  padding: 16px 32px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 30px;
   transition: all 0.2s;
   width: 80%;
   max-width: 300px;
@@ -175,9 +175,8 @@ watch(() => props.riddle.has_hint, (newValue) => {
 }
 
 .hint-button.active {
-  background-color: white;
-  color: black;
-  border: 2px solid #1976d2;
+  background-color: var(--croc-deep-purple);
+  color: var(--white);
 }
 
 .hint-button:hover:not(:disabled) {
@@ -208,5 +207,13 @@ watch(() => props.riddle.has_hint, (newValue) => {
   width: 90%;
   max-width: 600px;
   text-align: center;
+}
+
+@media (max-width: 430px) {
+  .hint-button {
+    font-size: 15px;
+    padding: 12px 15px;
+  }
+  
 }
 </style> 

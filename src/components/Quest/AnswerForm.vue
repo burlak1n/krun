@@ -56,11 +56,11 @@ const onSubmit = () => {
 }
 
 .answer-input {
-  font-family: 'Involve', Arial, sans-serif;
-  padding: 12px 4px; /* Устанавливаем верхний/нижний отступ 12px и левый/правый 4px */
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
+  font-family: 'Mont_SB';
+  padding: 16px 32px; /* Устанавливаем верхний/нижний отступ 12px и левый/правый 4px */
+  border: 2px solid var(--croc-purple);
+  border-radius: 12px;
+  font-size: 30px;
   width: 100%;
   text-align: center;
 }
@@ -74,14 +74,14 @@ const onSubmit = () => {
 }
 
 .submit-button {
-  font-family: 'Involve', Arial, sans-serif;
-  background-color: #4285f4;
+  font-family: 'Mont_SB';
+  background-color: var(--croc-deep-purple);
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
+  border-radius: 12px;
+  padding: 16px 32px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 30px;
   transition: background-color 0.2s;
   white-space: nowrap;
 }
@@ -91,7 +91,18 @@ const onSubmit = () => {
 }
 
 .submit-button:disabled {
-  background-color: #aaa;
+  background-color: var(--croc-purple);
   cursor: not-allowed;
+}
+
+@media (max-width: 430px) {
+  .answer-input {
+    padding: 8px 12px;
+    font-size: 15px;
+  }
+  .submit-button {
+    padding: 9px 25px;
+    font-size: 15px;
+  }
 }
 </style> 

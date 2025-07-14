@@ -2,18 +2,12 @@
   <section class="HomeFooter">
     <div class="footer-content">
       <div class="nav-links">
-        <router-link to="/previous" class="nav-link">{{ $t('header.previousQuests') }}</router-link>
         <router-link to="/registration" class="nav-link">{{ $t('header.signin') }}</router-link>
       </div>
-
       <div class="auth-block">
         <div class="auth-buttons">
             <a href="https://t.me/+pieUILI_L_RjODk6" target="_blank" rel="noopener noreferrer" class="auth-button telegram">
-            <img src="@/assets/images/tg-mini-logo.svg" alt="Telegram" />
-          </a>
-          <a href="https://vk.com/hserun?utm_source=vkontakte&utm_medium=cpc&utm_campaign=%7Bcampaign_id%7D&utm_content=%7Bad_id%7D
-" target="_blank" rel="noopener noreferrer" class="auth-button vk">
-            <img src="@/assets/images/vk-mini-logo.svg" alt="VK" />
+            <img src="@/assets/images/tg_footer.svg" alt="Telegram" />
           </a>
         </div>
       </div>
@@ -36,12 +30,12 @@ export default {
 
 <style scoped>
 .HomeFooter {
-  padding: 60px 20px;
-  background-color: #F3F3F3;
+  padding: 0px 20px;
+  background-color: var(--text-color);
 }
 
 .footer-content {
-  max-width: 1360px;
+  max-width: 1450px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -55,15 +49,10 @@ export default {
 }
 
 .nav-link {
-  color: #000000;
+  color: var(--white);
   text-decoration: none;
-  font-size: 32px;
-  font-family: 'InvolveMedium';
-  transition: font-family 0.3s;
-}
-
-.nav-link:hover {
-  font-family: 'InvolveBold';
+  font-size: 30px;
+  font-family: 'Mont_R';
 }
 
 .auth-block {
@@ -78,13 +67,13 @@ export default {
 }
 
 .auth-button {
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
-  background-color: #F3F3F3;
+  background-color: var(--text-color);
   transition: transform 0.3s ease;
   border: 2px solid var(--hse-blue);
 }
@@ -94,8 +83,8 @@ export default {
 }
 
 .auth-button img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
 }
 
 .footer-info {
