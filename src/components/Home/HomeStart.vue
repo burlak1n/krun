@@ -33,7 +33,7 @@
             </div>
           </div>
       </div><div class="hero-img-section">
-        <img src="@/assets/images/decor.svg" class ="hero-img" />
+        <img src="@/assets/images/decor.png" class ="hero-img" />
         </div>
       </div>
     <div v-if="userName">
