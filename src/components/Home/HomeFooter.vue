@@ -6,7 +6,7 @@
       </div>
       <div class="auth-block">
         <div class="auth-buttons">
-            <a href="https://t.me/+pieUILI_L_RjODk6" target="_blank" rel="noopener noreferrer" class="auth-button telegram">
+            <a href="https://t.me/+muyJZC7Rr_9jMjVi" target="_blank" rel="noopener noreferrer" class="auth-button telegram">
             <img src="@/assets/images/tg_footer.svg" alt="Telegram" />
           </a>
         </div>
@@ -119,8 +119,8 @@ export default {
   }
 
   .auth-button img {
-    width: 25px;
-    height: 25px;
+    width: 50px;
+    height: 50px;
   }
 }
 @media (max-width: 600px) {

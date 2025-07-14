@@ -15,7 +15,7 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
-    meta: { title: "Культурно-исторический квест по Москве" }
+    meta: { title: "TECHNO QUEST КРОК" }
   },
   {
      path: "/quest",
