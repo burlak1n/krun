@@ -378,8 +378,6 @@ export default {
     },
     
     async handleCreateTeam() {
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         this.error = null;
         // Преобразуем language_id в число перед отправкой, используя текущее значение
@@ -402,29 +400,6 @@ export default {
       } catch (error) {
         this.error = error.message;
       }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        this.error = null;
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const languageId = parseInt(this.selectedLanguage) || this.getDefaultLanguageId();
-        
-        // Получаем данные новой команды из ответа и отправляем их в родительский компонент
-        this.$emit('team-created', {
-          id: Math.floor(Math.random() * 1000),
-          name: this.newTeamName,
-          language_id: languageId,
-          role: 'captain'
-        });
-        
-        this.newTeamName = '';
-        console.log('Команда создана (MOCK)');
-      } catch (error) {
-        this.error = error.message;
-      }
     },
     
     async handleEditTeam() {
@@ -441,8 +416,6 @@ export default {
       
       this.isSaving = true;
       
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         await this.makeRequest('/api/auth/command/rename', 'POST', {
           name: this.editedTeamName,
@@ -466,36 +439,9 @@ export default {
       } finally {
         this.isSaving = false;
       }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Оповещаем родительский компонент об изменениях
-        this.$emit('update', { 
-          name: this.editedTeamName, 
-          language_id: currentLanguageId 
-        });
-        
-        // Закрываем режим редактирования после успешного запроса
-        this.isEditing = false;
-        console.log('Команда обновлена (MOCK)');
-      } catch (error) {
-        alert(`Ошибка при обновлении команды (MOCK): ${error.message}`);
-        
-        // В случае ошибки, возвращаем исходные значения
-        this.editedTeamName = this.team.name;
-        this.editedTeamLanguage = parseInt(this.team.language_id) || this.getDefaultLanguageId();
-      } finally {
-        this.isSaving = false;
-      }
     },
     
     async handleDeleteTeam() {
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         await this.makeRequest('/api/auth/command/delete', 'POST');
         this.hideModals();
@@ -504,45 +450,16 @@ export default {
       } catch (error) {
         alert(error.message);
       }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        this.hideModals();
-        // Отправляем отдельное событие для удаления команды
-        this.$emit('team-deleted');
-        console.log('Команда удалена (MOCK)');
-      } catch (error) {
-        alert(`Ошибка при удалении команды (MOCK): ${error.message}`);
-      }
     },
     
     async handleLeaveTeam() {
       if (confirm(this.$t('profile.leaveTeam') + "?")) {
-        // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-        /*
         try {
           await this.makeRequest('/api/auth/command/leave', 'POST');
           // Отправляем отдельное событие для ухода из команды
           this.$emit('team-left');
         } catch (error) {
           alert(error.message);
-        }
-        */
-        
-        // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-        try {
-          // Симулируем задержку API
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Отправляем отдельное событие для ухода из команды
-          this.$emit('team-left');
-          console.log('Покинул команду (MOCK)');
-        } catch (error) {
-          alert(`Ошибка при выходе из команды (MOCK): ${error.message}`);
         }
       }
     },
@@ -553,8 +470,6 @@ export default {
         return; // Выходим, если пользователь отменил
       }
       
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         // Отправляем запрос на удаление пользователя и ждем ответа
         await this.makeRequest('/api/auth/command/remove_user', 'POST', {
@@ -566,19 +481,6 @@ export default {
       } catch (error) {
         alert(error.message);
       }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Вместо локального обновления вызываем обновление всех данных команды
-        this.$emit('team-updated');
-        console.log(`Участник ${participantId} удален (MOCK)`);
-      } catch (error) {
-        alert(`Ошибка при удалении участника (MOCK): ${error.message}`);
-      }
     },
     
     toggleLookingStatus() {
@@ -589,8 +491,6 @@ export default {
       console.log('Загрузка пользователей начата...');
       this.isLoadingUsers = true;
       
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         console.log('Отправка запроса на сервер...');
         const response = await this.makeRequest('/api/auth/users/looking_for_team', 'GET');
@@ -604,49 +504,8 @@ export default {
       } finally {
         this.isLoadingUsers = false;
       }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        this.lookingUsers = [
-          {
-            id: 1,
-            full_name: "Анна Смирнова",
-            telegram_username: "anna_smirnova",
-            is_captain: false,
-            team_name: null
-          },
-          {
-            id: 2,
-            full_name: "Дмитрий Петров",
-            telegram_username: "dmitry_petrov",
-            is_captain: true,
-            team_name: "Команда Дмитрия"
-          },
-          {
-            id: 3,
-            full_name: "Елена Волкова",
-            telegram_username: "elena_volkova",
-            is_captain: false,
-            team_name: null
-          }
-        ];
-        
-        console.log('Пользователи загружены (MOCK):', this.lookingUsers.length);
-        this.lookingUsersLoaded = true;
-      } catch (error) {
-        console.error('Ошибка при загрузке пользователей (MOCK):', error);
-        this.lookingUsersLoaded = false;
-      } finally {
-        this.isLoadingUsers = false;
-      }
     },
     
-    // ЗАКОММЕНТИРОВАН ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-    /*
     async makeRequest(url, method, body) {
       const response = await fetch(url, {
         method,
@@ -661,7 +520,6 @@ export default {
       
       return response.json();
     }
-    */
   },
   created() {
     // Инициализация параметров при создании компонента

@@ -13,7 +13,7 @@
             </div>
           </div>
         </div>
-          <img src="@/assets/images/arrow.svg" alt="Декоративная стрелка" class="participation-arrow">
+          <img src="@/assets/images/arrow.svg" alt="" class="participation-arrow">
     </section>
   </template>
   
