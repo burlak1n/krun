@@ -146,8 +146,6 @@ export default {
       
       this.isSaving = true;
       
-      // ЗАГЛУШКА ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      /*
       try {
         // Подготавливаем данные для отправки
         const updateData = { full_name: this.editedFullName };
@@ -193,38 +191,6 @@ export default {
         this.isEditing = false;
       } catch (error) {
         alert(`${this.$t('profile.error')}: ${error.message}`);
-      } finally {
-        this.isSaving = false;
-      }
-      */
-      
-      // MOCK ДАННЫЕ ДЛЯ РАЗРАБОТКИ - закомментирован для разработки
-      try {
-        // Симулируем задержку API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Обновляем локальные данные для эмита
-        const updatedData = {
-          full_name: this.editedFullName
-        };
-        
-        // Всегда помещаем доп. поля в insider_info
-        if (this.isInsider || this.isCtc) {
-          updatedData.insider_info = {};
-          if (this.isInsider) {
-            updatedData.insider_info.student_organization = this.editedStudentOrganization;
-          } else { // isCtc
-            // СО для СтС не отправляется в @update, так как оно фиксировано
-          }
-          updatedData.insider_info.geo_link = this.editedGeoLink;
-        }
-        
-        // Оповещаем родительский компонент об изменениях
-        this.$emit('update', updatedData);
-        this.isEditing = false;
-        console.log('Профиль обновлен (MOCK)');
-      } catch (error) {
-        alert(`Ошибка при обновлении профиля (MOCK): ${error.message}`);
       } finally {
         this.isSaving = false;
       }
