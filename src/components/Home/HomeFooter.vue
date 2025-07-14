@@ -19,11 +19,9 @@
 </template>
 
 <script>
-import LanguageSwitcher from '@/components/UI/LanguageSwitcher.vue';
 export default {
   name: 'HomeFooter',
   components: {
-    LanguageSwitcher,
   },
 }
 </script>

@@ -123,14 +123,12 @@ import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
 import HomeHeader from '@/components/Home/HomeHeader.vue';
 import HomeFooter from '@/components/Home/HomeFooter.vue';
-import LanguageSwitcher from '@/components/UI/LanguageSwitcher.vue';
 
 export default {
   name: 'PreviousView',
   components: {
     HomeHeader,
     HomeFooter,
-    LanguageSwitcher
   },
   setup() {
     const router = useRouter();

@@ -280,10 +280,8 @@ export default {
   },
   methods: {
     getDefaultLanguageId() {
-      // Получаем текущий язык системы из i18n
-      const currentLocale = this.$i18n.locale;
-      // Преобразуем код языка в соответствующий ID
-      return currentLocale === 'en' ? 2 : 1; // 1 для русского, 2 для английского
+      // Всегда возвращаем ID русского языка
+      return 1; // 1 для русского языка
     },
     
     hideModals() {
