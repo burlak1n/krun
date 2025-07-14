@@ -12,6 +12,7 @@ import Toast from 'primevue/toast'; // Импортируем Toast
 import axios from 'axios';
 import './input.css'
 import '@/assets/styles/phonk-sans.css'; // <-- Импорт стилей шрифта
+import './registerServiceWorker'
 
 // Импортируем только нужные компоненты для лучшей оптимизации
 import UI from "./components/UI/index"

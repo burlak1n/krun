@@ -4,17 +4,46 @@ const api = axios.create({
   baseURL: process.env.VUE_APP_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
-    'Cache-Control': 'max-age=0, must-revalidate',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Accept-Encoding': 'gzip, deflate, br',
   },
   withCredentials: true // для работы с куками
 });
 
-// Добавляем timestamp к GET-запросам для предотвращения кэширования
+// Пути, для которых разрешено кэширование (статика и справочники)
+const CACHE_ALLOWED = [
+  '/static',
+  '/reference',
+  '/config',
+  '/img'
+];
+
+const CACHE_CONFIG = {
+  '/reference': { maxAge: 3600 },     // Справочники - 1 час
+  '/config': { maxAge: 1800 },        // Конфиги - 30 минут
+  '/static': { maxAge: 7200 },         // Статика - 2 часа
+  '/img': { maxAge: 7200 }
+};
+
+// Добавляем кэширование только для разрешённых путей
 api.interceptors.request.use(config => {
-  // Добавляем _t только для GET запросов, *кроме* insider-tasks-status
-  if (config.method === 'get' && !config.url.startsWith('/quest/insider-tasks-status')) {
-    const separator = config.url.includes('?') ? '&' : '?';
-    config.url = `${config.url}${separator}_t=${new Date().getTime()}`;
+  // Для разрешённых путей добавляем max-age, для остальных запрещаем кэш
+  const allowCache = CACHE_ALLOWED.some(prefix => config.url.startsWith(prefix));
+  if (allowCache) {
+    const cacheConfig = Object.entries(CACHE_CONFIG).find(([pattern]) => 
+      config.url.startsWith(pattern)
+    );
+    if (cacheConfig) {
+      config.headers['Cache-Control'] = `max-age=${cacheConfig[1].maxAge}`;
+    }
+  } else {
+    config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+    // timestamp не добавляем
+  }
+  // Оптимизация заголовков для снижения нагрузки
+  if (config.method === 'get') {
+    config.headers['Accept'] = 'application/json';
+    delete config.headers['Content-Type'];
   }
   return config;
 });

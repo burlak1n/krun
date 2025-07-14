@@ -19,7 +19,12 @@ export const useSecurityStore = defineStore('security', {
         return;
       }
       try {
-        const response = await fetch('/api/csrf-token');
+        // Пробуем разные эндпоинты для CSRF токена
+        let response = await fetch('/api/csrf-token');
+        if (!response.ok) {
+          // Если первый эндпоинт не работает, пробуем альтернативный
+          response = await fetch('/api/auth/csrf');
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -27,10 +32,7 @@ export const useSecurityStore = defineStore('security', {
         this.csrfToken = data.token; // Прямое изменение состояния
       } catch (error) {
         console.error('Ошибка при получении CSRF-токена:', error);
-        // Здесь можно вызвать setError из errorStore, если это критическая ошибка
-        // import { useErrorStore } from './error';
-        // const errorStore = useErrorStore();
-        // errorStore.setError('Не удалось получить токен безопасности.');
+        // Продолжаем работу без CSRF токена, если он недоступен
       }
     },
   },

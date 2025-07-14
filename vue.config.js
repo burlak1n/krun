@@ -1,5 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const backendProxyConfig = {
   target: 'http://127.0.0.1:8000',
@@ -18,7 +19,7 @@ const analyticsProxyConfig = {
 // Конфигурация Telegram ботов 
 const telegramConfig = {
   dev: '7190707372',  // ID бота для разработки
-  prod: '8091205117'  // ID бота для продакшена
+  prod: '7817626564'  // ID бота для продакшена
 };
 
 // Определяем текущую команду по аргументам запуска
@@ -57,8 +58,18 @@ module.exports = defineConfig({
         openAnalyzer: false, // Не открывать отчет автоматически
         reportFilename: '../bundle-report.html' // Имя файла отчета в корне проекта
       }]);
+
+      // Добавляем сжатие gzip для снижения размера файлов
+      config.plugin('compression').use(CompressionPlugin, [{
+        filename: '[path][base].gz',
+        algorithm: 'gzip',
+        test: /\.(js|css|html|svg)$/,
+        threshold: 10240, // Сжимать файлы больше 10KB
+        minRatio: 0.8
+      }]);
     }
     
+    // Оптимизация изображений
     config.module
       .rule('images')
       .use('image-webpack-loader')
@@ -67,38 +78,68 @@ module.exports = defineConfig({
         bypassOnDebug: true,
         mozjpeg: {
           progressive: true,
-          quality: 65
+          quality: 60 // Снижаем качество для уменьшения размера
         },
         optipng: {
-          enabled: false,
+          enabled: true, // Включаем оптимизацию PNG
+          optimizationLevel: 7
         },
         pngquant: {
-          quality: [0.65, 0.90],
+          quality: [0.60, 0.80], // Снижаем качество
           speed: 4
         },
         gifsicle: {
           interlaced: false,
+          optimizationLevel: 3
         },
         webp: {
-          quality: 75
+          quality: 70 // Снижаем качество WebP
+        },
+        svgo: {
+          plugins: [
+            { removeViewBox: false },
+            { removeEmptyAttrs: true },
+            { removeEmptyText: true }
+          ]
         }
       });
-    
+
+    // Улучшенная оптимизация бандлов для снижения дублирования
     config.optimization.splitChunks({
       cacheGroups: {
         vendors: {
           name: 'chunk-vendors',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          chunks: 'initial'
+          chunks: 'initial',
+          maxSize: 500000 // Ограничиваем размер вендорных бандлов
         },
         common: {
           name: 'chunk-common',
           minChunks: 2,
           priority: -20,
           chunks: 'initial',
-          reuseExistingChunk: true
+          reuseExistingChunk: true,
+          maxSize: 300000
+        },
+        // Отдельный бандл для PrimeVue компонентов
+        primevue: {
+          name: 'chunk-primevue',
+          test: /[\\/]node_modules[\\/]primevue[\\/]/,
+          priority: -5,
+          chunks: 'all'
         }
+      }
+    });
+
+    // Оптимизация для снижения размера CSS
+    config.optimization.minimize(true);
+    
+    // Кэширование для ускорения сборки
+    config.cache({
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename]
       }
     });
   },
@@ -111,7 +152,120 @@ module.exports = defineConfig({
     workboxOptions: {
       skipWaiting: true,
       clientsClaim: true,
-      exclude: [/\.map$/, /_redirects/]
+      exclude: [/\.map$/, /_redirects/],
+      // Кэшируем только статику и справочники
+      runtimeCaching: [
+        {
+          urlPattern: /\/static\//,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'static-files',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 дней
+            }
+          }
+        },
+        {
+          urlPattern: /\/reference\//,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'reference-files',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 24 * 60 * 60 // 1 день
+            }
+          }
+        },
+        {
+          urlPattern: /\/config\//,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'config-files',
+            expiration: {
+              maxEntries: 20,
+              maxAgeSeconds: 12 * 60 * 60 // 12 часов
+            }
+          }
+        },
+        {
+          urlPattern: /\/img\//,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 дней
+            }
+          }
+        },
+        {
+          urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images-all',
+            expiration: {
+              maxEntries: 300,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 дней
+            }
+          }
+        },
+        {
+          urlPattern: /\.(?:css)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'css-files',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 7 * 24 * 60 * 60 // 7 дней
+            }
+          }
+        },
+        {
+          urlPattern: /\.(?:js)$/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'js-files',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 7 * 24 * 60 * 60 // 7 дней
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/technoquestcroc\.ru\/.*\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'external-images',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 дней
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/technoquestcroc\.ru\/.*\.(?:css)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'external-css',
+            expiration: {
+              maxEntries: 20,
+              maxAgeSeconds: 7 * 24 * 60 * 60 // 7 дней
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/technoquestcroc\.ru\/.*\.(?:js)$/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'external-js',
+            expiration: {
+              maxEntries: 20,
+              maxAgeSeconds: 7 * 24 * 60 * 60 // 7 дней
+            }
+          }
+        }
+      ]
     }
   }
 });

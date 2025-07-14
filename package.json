@@ -24,8 +24,10 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-pwa": "^5.0.8",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-service": "^5.0.8",
+    "compression-webpack-plugin": "^10.0.0",
     "css-purge": "^1.1.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
