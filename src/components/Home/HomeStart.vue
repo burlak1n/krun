@@ -11,6 +11,7 @@
             <div class="info-text-container">
               <p class="event-date">{{ $t('start.eventdate') }}</p>
               <p class="event-place">{{ $t('start.eventplace') }}</p>
+              <a href="https://docs.google.com/document/d/1iLH6m0aUcZfEPrYlpXLySPBGTTQPgrFnzmIzAFLYgNs/edit?tab=t.0" class="quest-rules" target="_blank">{{ $t('start.questrules') }}</a>
             </div>
           </div>
           <div class="buttons-info-section">
@@ -216,6 +217,23 @@ export default {
   margin: 0px;
 }
 
+.quest-rules {
+  font-size: 30px;
+  color: #FFFFFF;
+  font-weight: bold;
+  margin-left: 0px;
+  font-family: 'Mont_R';
+  padding: 0px;
+  margin: 0px;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.quest-rules:hover {
+  opacity: 0.8;
+}
+
 .home-cards {
   color: white;
   position: relative;
@@ -300,6 +318,9 @@ export default {
   width: 329px;
 }
 .event-date, .event-place {
+  font-size: 20px;
+}
+.quest-rules {
   font-size: 20px;
 }
 .buttons-container {

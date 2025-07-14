@@ -16,6 +16,7 @@ export default {
     startquest: 'начать квест',
     eventdate: '15 июля 17:00',
     eventplace:'Волочаевская ул., 5, корп. 1',
+    questrules: 'Правила квеста',
     card1: '4-6 участников\u00A0 в команде',
     card2: 'квест идет 3,5\u00A0часа',
     card3: 'призы \u00A0победителям',
@@ -87,7 +88,7 @@ export default {
   },
   quest: {
     answerForm: {
-      placeholder: 'Введите ответ, как на картах'
+      placeholder: 'Введите ответ, как на Я.картах'
     },
     hint: {
       title: 'Подсказка'

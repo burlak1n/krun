@@ -14,6 +14,7 @@ export default {
     startquest: 'START QUEST',
     eventdate: 'April 27, 10:30',
     eventplace: 'Khitrovsky Lane, 2/8, building 5',
+    questrules: 'Quest Rules',
     card1: '2-6 participants in\u00A0a\u00A0team',
     card2: 'prizes from\u00A0partners',
     card3: 'the quest takes\u00A04\u00A0hours',
