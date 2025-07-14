@@ -30,9 +30,9 @@
           </div>
         </div>
         
-         <div class="button-container">
+        <div class="button-container">
           <button type="submit" class="register-button">{{ $t('telegramLogin.register') }}</button>
-        </div> 
+        </div>
       </form>
     </div>
   </div>
@@ -57,14 +57,6 @@ export default {
     // Получаем параметр redirect_url из URL, если он есть
     const urlParams = new URLSearchParams(window.location.search);
     this.redirectUrl = urlParams.get('redirect_url');
-    
-    // ДИАГНОСТИКА: Проверяем переменные окружения
-    console.log('=== ДИАГНОСТИКА ПЕРЕМЕННЫХ ОКРУЖЕНИЯ ===');
-    console.log('process.env.VUE_APP_TELEGRAM_BOT_ID:', process.env.VUE_APP_TELEGRAM_BOT_ID);
-    console.log('process.env.NODE_ENV:', process.env.NODE_ENV);
-    console.log('window.location.origin:', window.location.origin);
-    console.log('window.location.href:', window.location.href);
-    console.log('==========================================');
     
     // Проверяем, есть ли параметры авторизации Telegram в URL (при redirect)
     this.checkTelegramRedirect();
@@ -128,57 +120,14 @@ export default {
       }, 5000); // Скрываем ошибку через 5 секунд
     },
     
-    // Проверка доступности бота
-    async checkBotAvailability() {
-      const botId = process.env.VUE_APP_TELEGRAM_BOT_ID;
-      if (!botId) {
-        console.error('Bot ID не определен');
-        return false;
-      }
-      
-      try {
-        // Проверяем доступность бота через Telegram API
-        const response = await fetch(`https://api.telegram.org/bot${botId}/getMe`);
-        const data = await response.json();
-        
-        if (data.ok) {
-          console.log('Бот доступен:', data.result);
-          return true;
-        } else {
-          console.error('Бот недоступен:', data);
-          return false;
-        }
-      } catch (error) {
-        console.error('Ошибка проверки бота:', error);
-        return false;
-      }
-    },
-    
     // Начало регистрации (загрузка скрипта Telegram)
-    async startRegistration() {
-      console.log('=== ОТЛАДКА TELEGRAM LOGIN ===');
-      console.log('process.env.VUE_APP_TELEGRAM_BOT_ID:', process.env.VUE_APP_TELEGRAM_BOT_ID);
-      console.log('window.location.origin:', window.location.origin);
-      console.log('window.location.href:', window.location.href);
-      console.log('==============================');
-      
-      // Проверяем доступность бота
-      const botAvailable = await this.checkBotAvailability();
-      if (!botAvailable) {
-        this.showError('Бот недоступен. Обратитесь к администратору.');
-        return;
-      }
-      
+    startRegistration() {
       this.loadTelegramScript();
     },
     
     // Загрузка скрипта для виджета Telegram Login
     loadTelegramScript() {
-      console.log('Загрузка скрипта Telegram...');
-      console.log('VUE_APP_TELEGRAM_BOT_ID:', process.env.VUE_APP_TELEGRAM_BOT_ID);
-      
       if (window.Telegram && window.Telegram.Login) {
-        console.log('Telegram API уже загружен');
         this.initTelegramWidget();
         return;
       }
@@ -186,72 +135,32 @@ export default {
       const script = document.createElement("script");
       script.src = "https://telegram.org/js/telegram-widget.js?22";
       script.async = true;
-      script.onload = () => {
-        console.log('Скрипт Telegram загружен');
-        this.initTelegramWidget();
-      };
-      script.onerror = (error) => {
-        console.error('Ошибка загрузки скрипта Telegram:', error);
-        this.showError('Ошибка загрузки скрипта Telegram. Попробуйте обновить страницу.');
-      };
-      
-      // Добавляем таймаут для случая, когда скрипт зависает
-      setTimeout(() => {
-        if (!window.Telegram || !window.Telegram.Login) {
-          console.error('Таймаут загрузки скрипта Telegram');
-          this.showError('Таймаут загрузки скрипта Telegram. Проверьте интернет-соединение.');
-        }
-      }, 10000); // 10 секунд
-      
+      script.onload = this.initTelegramWidget;
       document.head.appendChild(script);
     },
 
     // Инициализация виджета Telegram Login
     initTelegramWidget() {
-      console.log('Инициализация виджета Telegram...');
-      console.log('window.Telegram:', window.Telegram);
-      console.log('window.Telegram.Login:', window.Telegram?.Login);
-      
       if (!window.Telegram || !window.Telegram.Login) {
-        console.error('Telegram API не доступен');
         this.showError(this.$t('telegramLogin.errorWidgetLoading'));
         return;
       }
 
-      const botId = process.env.VUE_APP_TELEGRAM_BOT_ID;
-      // Используем текущий URL как fallback, если origin не определен
-      const returnUrl = window.location.origin 
-        ? window.location.origin + '/auth/telegram'
-        : window.location.protocol + '//' + window.location.host + '/auth/telegram';
-      
-      console.log('Bot ID:', botId);
-      console.log('Return URL:', returnUrl);
-      console.log('Current location:', window.location.href);
-
-      try {
-        window.Telegram.Login.auth(
-          {
-            bot_id: botId, // ID бота из переменных окружения
-            request_access: "write",
-            lang: this.$i18n?.locale || "ru",
-            // Используем относительный URL для лучшей поддержки разных окружений
-            return_to: returnUrl
-          },
-          this.onTelegramAuth
-        );
-        console.log('Виджет Telegram инициализирован успешно');
-      } catch (error) {
-        console.error('Ошибка инициализации виджета Telegram:', error);
-        this.showError('Ошибка инициализации виджета Telegram: ' + error.message);
-      }
+      window.Telegram.Login.auth(
+        {
+          bot_id: process.env.VUE_APP_TELEGRAM_BOT_ID, // ID бота из переменных окружения
+          request_access: "write",
+          lang: this.$i18n?.locale || "ru",
+          // Используем относительный URL для лучшей поддержки разных окружений
+          return_to: window.location.origin + '/auth/telegram'
+        },
+        this.onTelegramAuth
+      );
     },
 
     // Обработчик данных авторизации из Telegram
     async onTelegramAuth(user) {
-      console.log('Получены данные от Telegram:', user);
-      
       if (!user) {
-        console.error('Нет данных пользователя от Telegram');
         this.showError(this.$t('telegramLogin.errorUserData'));
         return;
       }
