@@ -2,10 +2,13 @@
   <div 
     class="riddle-block"
     :class="{'insider-visited': riddle.has_insider_attempt}"
+    :key="`riddle-${riddle.id}-${riddle.has_insider_attempt}-${riddle.has_additional_field}`"
   >
     
     <!-- Если загадка уже отвечена -->
     <template v-if="isAnswered(riddle)">
+      <!-- Заголовок загадки -->
+      <h3 class="riddle-title" v-html="riddle.title"></h3>
       <!-- Отображаем координаты с возможностью копирования -->
       <div 
         v-if="riddle.geo_answered" 
@@ -15,26 +18,6 @@
         <span v-html="riddle.geo_answered"></span> <!-- Координаты без ссылки -->
         <span class="tooltip">{{ tooltipText }}</span>
       </div>
-      <!-- Контейнер для иконок-ссылок инсайдеров -->
-      <div v-if="riddle.insiderLinks && riddle.insiderLinks.length > 0" class="insider-links-container">
-        <!-- Отображаем до 2х иконок -->
-        <a 
-          v-for="(link, index) in riddle.insiderLinks.slice(0, 2)" 
-          :key="index" 
-          :href="link" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="insider-icon-link"
-        >
-          <img 
-            :src="index === 0 ? require('@/assets/images/insider1.svg') : require('@/assets/images/insider2.svg')" 
-            alt="Местоположение инсайдера"
-            width="50" 
-            height="50" 
-          />
-        </a>
-      </div>
-      <p class="riddle-text">{{ riddle.text_answered || 'Нет данных' }}</p>
       <!-- Используем ImageViewer для отвеченного изображения -->
       <ImageViewer 
         v-if="riddle.image_path_answered && getFileType(riddle.image_path_answered) === 'image'"
@@ -66,6 +49,26 @@
         :filePath="riddle.image_path_answered"
         maxWidth="100%"
         class="riddle-image" />
+      <!-- Контейнер для иконок-ссылок инсайдеров -->
+      <div v-if="riddle.insiderLinks && riddle.insiderLinks.length > 0" class="insider-links-container">
+        <!-- Отображаем до 2х иконок -->
+        <a 
+          v-for="(link, index) in riddle.insiderLinks.slice(0, 2)" 
+          :key="index" 
+          :href="link" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="insider-icon-link"
+        >
+          <img 
+            :src="index === 0 ? require('@/assets/images/insider1.svg') : require('@/assets/images/insider2.svg')" 
+            alt="Местоположение инсайдера"
+            width="50" 
+            height="50" 
+          />
+        </a>
+      </div>
+      <p class="riddle-text">{{ riddle.text_answered || 'Нет данных' }}</p>
       <!-- Уведомление о копировании -->
       <div v-if="copySuccess" class="copy-notification">Скопировано!</div>
     </template>
@@ -109,11 +112,26 @@
       <AnswerForm 
         :riddleId="riddle.id" 
         :disabled="questStore.checkingAnswer"
+        :class="{ 'wrong-answer': showWrongAnswer }"
         @submit-answer="handleRiddleSubmit"
       />
     </template>
     
-    <div v-if="riddle.has_insider_attempt" class="insider-badge">{{ $t('quest.riddleCard.insiderBadge') }}</div>
+    <!-- Поле ввода для дополнительных данных (показываем если нужно) -->
+    <AnswerForm 
+      v-if="shouldShowInput(riddle)"
+      :riddleId="riddle.id" 
+      :disabled="questStore.checkingAnswer"
+      :isAdditional="true"
+      :class="{ 'wrong-answer': showWrongAnswer }"
+      @submit-answer="handleRiddleSubmit"
+    />
+    
+
+    
+    <div v-if="riddle.has_insider_attempt" class="insider-badge">
+      {{ riddle.has_additional_field ? 'Дополнительная загадка решена' : 'Отсканировано инсайдером' }}
+    </div>
 
     <!-- Модальное окно для просмотра изображений -->
     <div v-if="showImageModal" class="image-modal" @click="closeImageModal">
@@ -126,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick, getCurrentInstance } from 'vue';
 import { useQuestStore } from '@/stores/quest';
 import ImageViewer from './FileViewers/ImageViewer.vue'; // Импортируем ImageViewer
 import VideoPlayer from './FileViewers/VideoPlayer.vue'; // Импортируем VideoPlayer
@@ -143,10 +161,12 @@ const props = defineProps({
   }
 });
 
+const instance = getCurrentInstance();
 const questStore = useQuestStore();
 
 const showImageModal = ref(false);
 const modalImageSrc = ref('');
+const showWrongAnswer = ref(false);
 
 // --- Логика копирования в буфер ---
 const copySuccess = ref(false);
@@ -207,24 +227,42 @@ const handleRiddleSubmit = async (answer) => {
   
   try {
     const result = await questStore.checkAnswer(riddleId, answer); // Вызываем action
-    if (result.ok && result.isCorrect) {
-      console.log(`Riddle ${riddleId}: Correct answer!`);
-      // Опционально: Очистка поля ввода теперь может быть в AnswerForm 
-      // или можно сгенерировать событие из AnswerForm и очистить здесь.
-    } else if (result.ok && !result.isCorrect) {
-      alert('Неправильный ответ'); 
+    
+    if (result.isCorrect) {
+      // Принудительно обновляем компонент после изменения данных
+      await nextTick();
+    } else if (result.isCorrect === false) {
+      // Неправильный ответ - показываем красную обводку
+      showWrongAnswer.value = true;
+      setTimeout(() => {
+        showWrongAnswer.value = false;
+      }, 2000);
     } else {
-      alert('Ошибка проверки: ' + (result.message || 'Unknown error'));
+      // Показываем ошибку в интерфейсе
+      showWrongAnswer.value = true;
+      setTimeout(() => {
+        showWrongAnswer.value = false;
+      }, 2000);
     }
   } catch (error) {
-    alert('Client-side error checking answer.');
-    console.error('Client-side error in handleRiddleSubmit:', error);
+    // Показываем ошибку в интерфейсе
+    showWrongAnswer.value = true;
+    setTimeout(() => {
+      showWrongAnswer.value = false;
+    }, 2000);
   }
 };
 
 const isAnswered = (riddle) => {
   // Используем props.riddle внутри компоненты
-  return riddle.text_answered || riddle.image_path_answered || riddle.geo_answered;
+  return riddle.text_answered || riddle.image_path_answered || riddle.geo_answered || riddle.has_insider_attempt;
+};
+
+const shouldShowInput = (riddle) => {
+  // Поле ввода показываем, если требуется дополнительный ввод или есть дополнительное поле
+  // НО НЕ показываем, если есть попытка инсайдера
+  const shouldShow = (riddle.needsAdditionalInput || riddle.has_additional_field) && !riddle.has_insider_attempt;
+  return shouldShow;
 };
 
 // --- Логика отображения файлов ---
@@ -257,24 +295,24 @@ const getFileType = (filePath) => {
   background-color: var(--white);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-  padding: 48px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .insider-visited {
-  border-color: var (--croc-green);
+  border: 4px solid var(--croc-green);
 }
 
 .riddle-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: var (--croc-purple);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--croc-purple);
   margin-top: 0;
-  margin-bottom: 3px;
+  margin-bottom: 8px;
   text-align: center;
   width: 100%;
 }
@@ -318,9 +356,21 @@ const getFileType = (filePath) => {
   font-size: 12px;
   margin-top: 10px;
   text-align: center;
-  color: #4caf50;
+  color: var(--croc-green);
   background-color: rgba(76, 175, 80, 0.1);
-  border: 1px solid #4caf50;
+  border: 1px solid var(--croc-green);
+}
+
+.wrong-answer :deep(.answer-input) {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
 }
 
 /* Стили для иконки-ссылки инсайдера (одиночной или в контейнере) */

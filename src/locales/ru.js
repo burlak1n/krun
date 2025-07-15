@@ -88,13 +88,15 @@ export default {
   },
   quest: {
     answerForm: {
-      placeholder: 'Введите ответ, как на Я.картах'
+      placeholder: 'Введите ответ, как на Я.картах',
+      additionalPlaceholder: 'Введите ответ'
     },
     hint: {
       title: 'Подсказка'
     },
     riddleCard: {
-      insiderBadge: 'Отсканировано инсайдером'
+      insiderBadge: 'Отсканировано инсайдером',
+      additionalSolvedBadge: 'Дополнительная загадка решена'
     }
   },
   faq: {

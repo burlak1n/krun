@@ -105,7 +105,10 @@ export const useQuestStore = defineStore('quest', () => {
       const response = await questAPI.checkAnswer(riddleId, answer);
       result = response.data;
 
-      if (result.ok) {
+      // Проверяем успешность ответа (считаем успешным если есть ok или isCorrect)
+      const isSuccess = result.ok !== undefined ? result.ok : (result.isCorrect !== undefined);
+      
+      if (isSuccess) {
         // Обновляем счет/монеты напрямую
         if (result.team_score !== undefined) teamScore.value = result.team_score;
         if (result.team_coins !== undefined) teamCoins.value = result.team_coins;
@@ -114,7 +117,19 @@ export const useQuestStore = defineStore('quest', () => {
         if (result.isCorrect && result.updatedRiddle && currentBlock.value && currentBlock.value.riddles) {
           const riddleIndex = currentBlock.value.riddles.findIndex(r => r.id === riddleId);
           if (riddleIndex !== -1) {
-            currentBlock.value.riddles[riddleIndex] = result.updatedRiddle;
+            // Обновляем загадку с учетом новых полей
+            const updatedRiddle = {
+              ...currentBlock.value.riddles[riddleIndex],
+              ...result.updatedRiddle,
+              needsAdditionalInput: result.needsAdditionalInput || false,
+              has_insider_attempt: result.updatedRiddle.has_insider_attempt || false,
+              has_additional_field: result.updatedRiddle.has_additional_field || false
+            };
+            
+
+            
+            // Принудительно обновляем массив для реактивности
+            currentBlock.value.riddles.splice(riddleIndex, 1, updatedRiddle);
           }
         }
       } else {
@@ -132,6 +147,11 @@ export const useQuestStore = defineStore('quest', () => {
       }
     } finally {
       checkingAnswer.value = false;
+    }
+    
+    // Убеждаемся, что результат содержит поле ok
+    if (result.ok === undefined) {
+      result.ok = result.isCorrect;
     }
     
     return result; // Возвращаем результат для обработки в компоненте (например, показать alert)

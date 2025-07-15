@@ -169,13 +169,15 @@ export default {
   },
   quest: {
     answerForm: {
-      placeholder: 'Enter the answer, as on the maps'
+      placeholder: 'Enter the answer, as on the maps',
+      additionalPlaceholder: 'Enter the answer'
     },
     hint: {
       title: 'Hint'
     },
     riddleCard: {
-      insiderBadge: 'Scanned by insider'
+      insiderBadge: 'Scanned by insider',
+      additionalSolvedBadge: 'Additional riddle solved'
     }
   },
   previousEventAnswers: {
