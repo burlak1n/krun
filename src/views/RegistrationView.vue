@@ -10,7 +10,6 @@
       </div>
       
       <h1 class="registration-title">{{ $t('registration.title') }}</h1>
-      <p class="registration-address">{{ $t('registration.address') }}</p>
       <TelegramLogin @auth="handleAuth" botName="hse_run_bot"/>
     </div>
   </div>
@@ -102,15 +101,6 @@ export default {
   font-family: 'Mont_SB';
   margin: 0;
 }
-
-.registration-address {
-  color: var(--text-color);
-  font-size: 24px;
-  text-align: center;
-  font-family: 'Mont_R';
-  margin: 0;
-}
-
 :root {
   margin: 0;
   padding: 0;
